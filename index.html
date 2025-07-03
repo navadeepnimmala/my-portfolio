@@ -1,12 +1,154 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Navadeep's Portfolio</title>
+    <meta charset="UTF-8">
+    <title>Navadeep Shopping</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; padding: 0;
+            background: #f4f4f4;
+        }
+        header {
+            background: #2d3e50;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        nav {
+            background: #1abc9c;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .product {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            width: 220px;
+            padding: 15px;
+            text-align: center;
+        }
+        .product img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .cart {
+            margin-top: 30px;
+            padding: 15px;
+            background: #eafaf1;
+            border-radius: 6px;
+        }
+        .cart ul {
+            list-style: none;
+            padding: 0;
+        }
+        .cart li {
+            margin-bottom: 8px;
+        }
+        .btn {
+            background: #1abc9c;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:active {
+            background: #159c85;
+        }
+    </style>
 </head>
-<body style="background-color: #d3108c;">
-    
-    <h1 style="color: white; text-align: center;">Welcome to Navadeep's new website</h1>
+<body>
+    <header>
+        <h1>Navadeep Shopping</h1>
+    </header>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Products</a>
+        <a href="#">Cart</a>
+        <a href="#">Contact</a>
+    </nav>
+    <div class="container">
+        <h2>Our Products</h2>
+        <div class="products" id="products"></div>
+        <div class="cart" id="cart">
+            <h3>Your Cart</h3>
+            <ul id="cart-items"></ul>
+            <strong>Total: $<span id="cart-total">0</span></strong>
+        </div>
+    </div>
+    <script>
+        const products = [
+            {id: 1, name: "T-Shirt", price: 15, img: "https://via.placeholder.com/120?text=T-Shirt"},
+            {id: 2, name: "Sneakers", price: 45, img: "https://via.placeholder.com/120?text=Sneakers"},
+            {id: 3, name: "Backpack", price: 30, img: "https://via.placeholder.com/120?text=Backpack"},
+            {id: 4, name: "Watch", price: 60, img: "https://via.placeholder.com/120?text=Watch"},
+            {id: 5, name: "Sunglasses", price: 20, img: "https://via.placeholder.com/120?text=Sunglasses"}
+        ];
+
+        const cart = [];
+
+        function renderProducts() {
+            const productsDiv = document.getElementById('products');
+            productsDiv.innerHTML = '';
+            products.forEach(product => {
+                const div = document.createElement('div');
+                div.className = 'product';
+                div.innerHTML = `
+                    <img src="${product.img}" alt="${product.name}">
+                    <h4>${product.name}</h4>
+                    <p>Price: $${product.price}</p>
+                    <button class="btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                `;
+                productsDiv.appendChild(div);
+            });
+        }
+
+        function renderCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            cartItems.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price * item.qty;
+                cartItems.innerHTML += `<li>${item.name} x ${item.qty} - $${item.price * item.qty}</li>`;
+            });
+            cartTotal.textContent = total;
+        }
+
+        window.addToCart = function(productId) {
+            const product = products.find(p => p.id === productId);
+            const cartItem = cart.find(item => item.id === productId);
+            if (cartItem) {
+                cartItem.qty += 1;
+            } else {
+                cart.push({...product, qty: 1});
+            }
+            renderCart();
+        }
+
+        renderProducts();
+        renderCart();
+    </script>
 </body>
-<ul style="color: white; font-size: 18px;">
-      <li>I am learning programming languages.</li>
-</ul>
+</html>
